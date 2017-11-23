@@ -1,4 +1,4 @@
-// объявление функций и классов для вычисления арифметических выражений
+// РѕР±СЉСЏРІР»РµРЅРёРµ С„СѓРЅРєС†РёР№ Рё РєР»Р°СЃСЃРѕРІ РґР»СЏ РІС‹С‡РёСЃР»РµРЅРёСЏ Р°СЂРёС„РјРµС‚РёС‡РµСЃРєРёС… РІС‹СЂР°Р¶РµРЅРёР№
 
 #pragma once
 
@@ -13,7 +13,7 @@ const string allOperators = "+-*/()";
 struct Term
 {
 	TermTypes type;
-	string symbol; // можно без него
+	//string symbol; // РјРѕР¶РЅРѕ Р±РµР· РЅРµРіРѕ
 	double val;
 
 	Term();
@@ -21,30 +21,30 @@ struct Term
 	Term(char c);
 	Term(const string& str, TermTypes myType);
 	Term(char c, TermTypes myType);
-	// конструктор копирования
-	// перегрузка =
+	// РєРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ РєРѕРїРёСЂРѕРІР°РЅРёСЏ
+	// РїРµСЂРµРіСЂСѓР·РєР° =
 };
 
-// конвертация в double функция stod(): http://www.cplusplus.com/reference/string/stod/
+// РєРѕРЅРІРµСЂС‚Р°С†РёСЏ РІ double С„СѓРЅРєС†РёСЏ stod(): http://www.cplusplus.com/reference/string/stod/
 
 
-// "(34-5)" ==>  массив из 5 Term 
-// если храним поле symbol
+// "(34-5)" ==>  РјР°СЃСЃРёРІ РёР· 5 Term 
+// РµСЃР»Рё С…СЂР°РЅРёРј РїРѕР»Рµ symbol
 // [0] type = OPEN_BRACKET, symbol = "(", val = 0.0;
 // [1] type = VALUE, symbol = "34", val = 34.0;
 // [2] type = OPERATOR, symbol = "-", val = 0.0;
 // [3] type = VALUE, symbol = "5", val = 5.0;
 // [2] type = CLOSE_BRACKET, symbol = ")", val = 0.0;
 
-// если НЕ храним поле symbol
+// РµСЃР»Рё РќР• С…СЂР°РЅРёРј РїРѕР»Рµ symbol
 // [0] type = OPEN_BRACKET, val = 0.0;
 // [1] type = VALUE, symbol = "34", val = 34.0;
-// [2] type = OPERATOR, val = 1.0 (это позиция '-' в строке allOperators);
+// [2] type = OPERATOR, val = 1.0 (СЌС‚Рѕ РїРѕР·РёС†РёСЏ '-' РІ СЃС‚СЂРѕРєРµ allOperators);
 // [3] type = VALUE, val = 5.0;
 // [2] type = CLOSE_BRACKET, val = 0.0;
 
 
-// для этой строки: polishTerms = {"34", "5", "-"}
+// РґР»СЏ СЌС‚РѕР№ СЃС‚СЂРѕРєРё: polishTerms = {"34", "5", "-"}
 
 //Term t = Term("(");
 //Term t2 = Term("34");
@@ -53,15 +53,15 @@ class Arithmetic
 {
 	string inputStr;
 	Term* terms;
-	int nTerms; // число термов во входной строке
+	int nTerms; // С‡РёСЃР»Рѕ С‚РµСЂРјРѕРІ РІРѕ РІС…РѕРґРЅРѕР№ СЃС‚СЂРѕРєРµ
 
-	Term* polishTerms; // польская запись в виде массива термов
-	int nPolishTerms; // число термов в польской записи
+	Term* polishTerms; // РїРѕР»СЊСЃРєР°СЏ Р·Р°РїРёСЃСЊ РІ РІРёРґРµ РјР°СЃСЃРёРІР° С‚РµСЂРјРѕРІ
+	int nPolishTerms; // С‡РёСЃР»Рѕ С‚РµСЂРјРѕРІ РІ РїРѕР»СЊСЃРєРѕР№ Р·Р°РїРёСЃРё
 
 
-	void DivideToTerms(); // обходим входнуюю строку и разбиваем ее на массив terms, здесь же определяем их кол-во.
-	void ConvertToPolish(); // вход - массив terms, nTerms; выход - массив polishTerms, nPolishTerms
-	double Calculate(); // вычисление по польской записи. Вход - массив polishTerms, nPolishTerms, выход - double ответ
+	void DivideToTerms(); // РѕР±С…РѕРґРёРј РІС…РѕРґРЅСѓСЋСЋ СЃС‚СЂРѕРєСѓ Рё СЂР°Р·Р±РёРІР°РµРј РµРµ РЅР° РјР°СЃСЃРёРІ terms, Р·РґРµСЃСЊ Р¶Рµ РѕРїСЂРµРґРµР»СЏРµРј РёС… РєРѕР»-РІРѕ.
+	void ConvertToPolish(); // РІС…РѕРґ - РјР°СЃСЃРёРІ terms, nTerms; РІС‹С…РѕРґ - РјР°СЃСЃРёРІ polishTerms, nPolishTerms
+	double Calculate(); // РІС‹С‡РёСЃР»РµРЅРёРµ РїРѕ РїРѕР»СЊСЃРєРѕР№ Р·Р°РїРёСЃРё. Р’С…РѕРґ - РјР°СЃСЃРёРІ polishTerms, nPolishTerms, РІС‹С…РѕРґ - double РѕС‚РІРµС‚
 
 public:
 	Arithmetic(const string& str)
@@ -70,7 +70,7 @@ public:
 		inputStr = str;
 		nTerms = 0;
 	}
-	int Check(); //возвращает позицию, в которой ошибка
+	int Check(); //РІРѕР·РІСЂР°С‰Р°РµС‚ РїРѕР·РёС†РёСЋ, РІ РєРѕС‚РѕСЂРѕР№ РѕС€РёР±РєР°
 };
 
 
@@ -80,13 +80,13 @@ void Arithmetic::DivideToTerms()
 	{
 		char c = inputStr[i];
 
-		// способ 1
-		if (allOperators.find(c) != string::npos) // если символ нашли в строке allOperators
+		// СЃРїРѕСЃРѕР± 1
+		if (allOperators.find(c) != string::npos) // РµСЃР»Рё СЃРёРјРІРѕР» РЅР°С€Р»Рё РІ СЃС‚СЂРѕРєРµ allOperators
 		{
-      		terms[nTerms] = Term(c); // здесь определили тип внутри конструктора
+      		terms[nTerms] = Term(c); // Р·РґРµСЃСЊ РѕРїСЂРµРґРµР»РёР»Рё С‚РёРї РІРЅСѓС‚СЂРё РєРѕРЅСЃС‚СЂСѓРєС‚РѕСЂР°
 			nTerms++;
 		}
-		else if (isdigit(c)) // это цифра, начиная с нее будет число.
+		else if (isdigit(c)) // СЌС‚Рѕ С†РёС„СЂР°, РЅР°С‡РёРЅР°СЏ СЃ РЅРµРµ Р±СѓРґРµС‚ С‡РёСЃР»Рѕ.
 		{
 			string v;
 			int j = i;
@@ -95,17 +95,17 @@ void Arithmetic::DivideToTerms()
 				j++;
 			}
 			v = inputStr.substr(i, j - i);
-			terms[nTerms] = Term(v, VALUE); // здесь определили тип внутри конструктора
+			terms[nTerms] = Term(v, VALUE); // Р·РґРµСЃСЊ РѕРїСЂРµРґРµР»РёР»Рё С‚РёРї РІРЅСѓС‚СЂРё РєРѕРЅСЃС‚СЂСѓРєС‚РѕСЂР°
 			nTerms++;
 
 			i = j - 1;
 		}
-		// способ 2
+		// СЃРїРѕСЃРѕР± 2
 		//switch (c)
 		//{
 		//case '(': 
 		//	{
-		//		terms[nTerms] = Term('(', OPEN_BRACKET); // здесь тип определили снаружи конструктора
+		//		terms[nTerms] = Term('(', OPEN_BRACKET); // Р·РґРµСЃСЊ С‚РёРї РѕРїСЂРµРґРµР»РёР»Рё СЃРЅР°СЂСѓР¶Рё РєРѕРЅСЃС‚СЂСѓРєС‚РѕСЂР°
 		//		nTerms++;
 		//	}
 		//case ')': {}
