@@ -36,11 +36,12 @@ TEST(Stack, can_not_delete_if_stack_is_empty)
 	ASSERT_ANY_THROW(st.pop());
 }
 
-//TEST_F(TestStacks, copied_stack_is_equal_to_source_one)
-//{
-//	Stack<int> st(st1);
-//	EXPECT_EQ(st1, st);
-//}
+TEST_F(TestStacks, copied_stack_is_equal_to_source_one)
+{
+	Stack<int> st(st1);
+	EXPECT_EQ(9, st.pop());
+	//EXPECT_EQ(st1, st);
+}
 
 TEST_F(TestStacks, can_get_quantity)
 {
@@ -50,7 +51,7 @@ TEST_F(TestStacks, can_get_quantity)
 TEST_F(TestStacks, can_push_element_and_view_top)
 {
 	st1.push(0);
-	//EXPECT_EQ(11, st1.getTop());
+	EXPECT_EQ(11, st1.getTop());
 	EXPECT_EQ(0, st1.view());
 }
 

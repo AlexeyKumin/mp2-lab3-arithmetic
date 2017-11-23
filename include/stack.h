@@ -60,7 +60,7 @@ Stack<ValType>::Stack(const Stack &st)
 	Size = st.Size;
 	top = st.top;
 	pStack = new ValType[Size];
-	for (int i; i < top; i++)
+	for (int i = 0; i < top; i++)
 		pStack[i] = st.pStack[i];
 }/*-------------------------------------------------------------------------*/
 
