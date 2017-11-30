@@ -3,26 +3,25 @@
 #pragma once
 
 #include <string>
+#include "stack.h"
 
 using namespace std;
 
 enum TermTypes {OPEN_BRACKET, CLOSE_BRACKET, OPERATOR, VALUE, UNKNOWN} ;
 
-const string allOperators = "+-*/()";
+const string allOperators = "()+-*/";
 
 struct Term
 {
 	TermTypes type;
-	//string symbol; // можно без него
 	double val;
 
 	Term();
-	Term(const string& str);
-	Term(char c);
+	Term(const char c);
 	Term(const string& str, TermTypes myType);
-	Term(char c, TermTypes myType);
-	// конструктор копирования
-	// перегрузка =
+	Term(const Term &t);// конструктор копирования
+	Term& operator=(const Term &t);// перегрузка =
+	~Term() { };
 };
 
 // конвертация в double функция stod(): http://www.cplusplus.com/reference/string/stod/
@@ -38,7 +37,7 @@ struct Term
 
 // если НЕ храним поле symbol
 // [0] type = OPEN_BRACKET, val = 0.0;
-// [1] type = VALUE, symbol = "34", val = 34.0;
+// [1] type = VALUE, val = 34.0;
 // [2] type = OPERATOR, val = 1.0 (это позиция '-' в строке allOperators);
 // [3] type = VALUE, val = 5.0;
 // [2] type = CLOSE_BRACKET, val = 0.0;
@@ -64,52 +63,10 @@ class Arithmetic
 	double Calculate(); // вычисление по польской записи. Вход - массив polishTerms, nPolishTerms, выход - double ответ
 
 public:
-	Arithmetic(const string& str)
-	{
-		terms = new Term[str.length()];
-		inputStr = str;
-		nTerms = 0;
-	}
+	Arithmetic(const string& str);
+	~Arithmetic() { delete[] terms; }
+
 	int Check(); //возвращает позицию, в которой ошибка
 };
 
 
-void Arithmetic::DivideToTerms()
-{
-	for (int i = 0; i < inputStr.length(); i++)
-	{
-		char c = inputStr[i];
-
-		// способ 1
-		if (allOperators.find(c) != string::npos) // если символ нашли в строке allOperators
-		{
-      		terms[nTerms] = Term(c); // здесь определили тип внутри конструктора
-			nTerms++;
-		}
-		else if (isdigit(c)) // это цифра, начиная с нее будет число.
-		{
-			string v;
-			int j = i;
-			while (j < inputStr.length() && (inputStr[j] == isdigit(c) || inputStr[j] == '.'))
-			{
-				j++;
-			}
-			v = inputStr.substr(i, j - i);
-			terms[nTerms] = Term(v, VALUE); // здесь определили тип внутри конструктора
-			nTerms++;
-
-			i = j - 1;
-		}
-		// способ 2
-		//switch (c)
-		//{
-		//case '(': 
-		//	{
-		//		terms[nTerms] = Term('(', OPEN_BRACKET); // здесь тип определили снаружи конструктора
-		//		nTerms++;
-		//	}
-		//case ')': {}
-		//case '+': {}
-		//}
-	}
-}
