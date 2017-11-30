@@ -1,6 +1,7 @@
-// реализация функций и классов для вычисления арифметических выражений
+// СЂРµР°Р»РёР·Р°С†РёСЏ С„СѓРЅРєС†РёР№ Рё РєР»Р°СЃСЃРѕРІ РґР»СЏ РІС‹С‡РёСЃР»РµРЅРёСЏ Р°СЂРёС„РјРµС‚РёС‡РµСЃРєРёС… РІС‹СЂР°Р¶РµРЅРёР№
 
 #include "arithmetic.h"
+
 Term::Term()
 {
 	type = UNKNOWN;
@@ -59,29 +60,60 @@ void Arithmetic::DivideToTerms()
 	for (int i = 0; i < inputStr.length(); i++)
 	{
 		char c = inputStr[i];
-		if (allOperators.find(c) != string::npos) // если символ нашли в строке allOperators
+		if (allOperators.find(c) != string::npos) // РµСЃР»Рё СЃРёРјРІРѕР» РЅР°С€Р»Рё РІ СЃС‚СЂРѕРєРµ allOperators
 		{
-			terms[nTerms] = Term(c); // здесь определили тип внутри конструктора
+			terms[nTerms] = Term(c); // Р·РґРµСЃСЊ РѕРїСЂРµРґРµР»РёР»Рё С‚РёРї РІРЅСѓС‚СЂРё РєРѕРЅСЃС‚СЂСѓРєС‚РѕСЂР°
 			nTerms++;
 		}
-		else if (isdigit(c)) // это цифра, начиная с нее будет число.
+		else if (isdigit(c)) // СЌС‚Рѕ С†РёС„СЂР°, РЅР°С‡РёРЅР°СЏ СЃ РЅРµРµ Р±СѓРґРµС‚ С‡РёСЃР»Рѕ.
 		{
 			string v;
 			int j = i;
 			while (j < inputStr.length() && (inputStr[j] == isdigit(c) || inputStr[j] == '.'))
 				j++;
 			v = inputStr.substr(i, j - i);
-			terms[nTerms] = Term(v, VALUE); // здесь определили тип внутри конструктора
+			terms[nTerms] = Term(v, VALUE); // Р·РґРµСЃСЊ РѕРїСЂРµРґРµР»РёР»Рё С‚РёРї СЃРЅР°СЂСѓР¶Рё РєРѕРЅСЃС‚СЂСѓРєС‚РѕСЂР°
 			nTerms++;
 			i = j - 1;
 		}
 		else if (c != ' ')
-			break;
+			throw "DontDivideToTerms";
 	}
 }
-
-int Arithmetic::Check()
+  
+void Arithmetic::Check()
 {
 	DivideToTerms();
-	return nTerms;
+	int k,p;
+	for (int i = 0; i < nTerms; i++)
+	{
+		if (terms[i].type == OPEN_BRACKET) k++;
+		if (terms[i].type == CLOSE_BRACKET) p++;
+	}
+	if (((terms[0].type == VALUE) || (terms[0].type == OPEN_BRACKET)) && ((terms[nTerms - 1].type == VALUE) || (terms[nTerms - 1].type == CLOSE_BRACKET))&&(p = k))
+	{
+		for (int i = 0; i < (nTerms - 1); i++)
+			switch (terms[i].type)
+		{
+			case VALUE: 
+				if ((terms[i + 1].type != CLOSE_BRACKET) || (terms[i + 1].type != OPERATOR))
+					throw "StringError";
+			case OPERATOR:
+				if ((terms[i + 1].type != VALUE) || (terms[i + 1].type != CLOSE_BRACKET))
+					throw "StringError";
+			case OPEN_BRACKET:
+				if ((terms[i + 1].type != VALUE) || (terms[i + 1].type != CLOSE_BRACKET))
+					throw "StringError";
+			case CLOSE_BRACKET:
+				if ((terms[i + 1].type != CLOSE_BRACKET) || (terms[i + 1].type != OPERATOR))
+					throw "StringError";
+		}
+	}	
+	else 
+		throw "StringError";
+}
+
+void Arithmetic::ConvertToPolish()
+{
+
 }

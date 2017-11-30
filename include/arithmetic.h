@@ -9,7 +9,7 @@ using namespace std;
 
 enum TermTypes {OPEN_BRACKET, CLOSE_BRACKET, OPERATOR, VALUE, UNKNOWN} ;
 
-const string allOperators = "()+-*/";
+const string allOperators = "(+-*/)";
 
 struct Term
 {
@@ -66,7 +66,7 @@ public:
 	Arithmetic(const string& str);
 	~Arithmetic() { delete[] terms; }
 
-	int Check(); //возвращает позицию, в которой ошибка
+	void Check(); 
 };
 
 
