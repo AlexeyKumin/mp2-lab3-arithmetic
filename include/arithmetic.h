@@ -22,6 +22,7 @@ struct Term
 	Term(const Term &t);// конструктор копирования
 	Term& operator=(const Term &t);// перегрузка =
 	~Term() { };
+	int PR(); // выводит приоритет оперции 
 };
 
 // конвертация в double функция stod(): http://www.cplusplus.com/reference/string/stod/
@@ -57,7 +58,7 @@ class Arithmetic
 	Term* polishTerms; // польская запись в виде массива термов
 	int nPolishTerms; // число термов в польской записи
 
-
+	void Check(); 
 	void DivideToTerms(); // обходим входнуюю строку и разбиваем ее на массив terms, здесь же определяем их кол-во.
 	void ConvertToPolish(); // вход - массив terms, nTerms; выход - массив polishTerms, nPolishTerms
 	double Calculate(); // вычисление по польской записи. Вход - массив polishTerms, nPolishTerms, выход - double ответ
@@ -65,8 +66,8 @@ class Arithmetic
 public:
 	Arithmetic(const string& str);
 	~Arithmetic() { delete[] terms; }
-
-	void Check(); 
+	double Result();
+	
 };
 
 
