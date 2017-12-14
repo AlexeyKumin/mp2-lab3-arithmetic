@@ -67,18 +67,18 @@ Term& Term::operator=(const Term &t)
 
 void Term::inputVar()
 {
-	char c = (int)val;
+	char c = (char)val;
 	cout << "Input VARIABLE " << c << " : ";
 	cin >> val;
 	cout << endl;
 }
-
+// a + a
 Arithmetic::Arithmetic(const string& str)
 {
 	terms = new Term[str.length()];
+	polishTerms = new Term[str.length()];
 	inputStr = str;
 	nTerms = 0;
-	polishTerms = terms;
 	nPolishTerms = 0;
 }
 
@@ -113,10 +113,10 @@ void Arithmetic::DivideToTerms()
 		}
 		else if (c != ' ')
 		{
-			throw "no";
+			terms[nTerms].type = UNKNOWN;
+			nTerms++;
 		}
 	}
-	cout << "norm" << endl;
 }
   
 void Arithmetic::Check()
@@ -153,7 +153,6 @@ void Arithmetic::Check()
 
 void Arithmetic::ConvertToPolish()
 {
-	polishTerms = new Term[nTerms];
 	Term a;
 	Stack<Term> st;
 	int k = 0;
@@ -191,7 +190,7 @@ void Arithmetic::ConvertToPolish()
 						polishTerms[nPolishTerms] = st.pop();
 						nPolishTerms++;
 					}
-					a = st.pop();
+					st.pop();
 					k = 0;
 				}
 			break;

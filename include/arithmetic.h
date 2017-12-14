@@ -60,16 +60,23 @@ class Arithmetic
 	Term* polishTerms; // польская запись в виде массива термов
 	int nPolishTerms; // число термов в польской записи
 
-	void Check(); 
+	 
 	//void DivideToTerms(); // обходим входнуюю строку и разбиваем ее на массив terms, здесь же определяем их кол-во.
-	void ConvertToPolish(); // вход - массив terms, nTerms; выход - массив polishTerms, nPolishTerms
-	double Calculate(); // вычисление по польской записи. Вход - массив polishTerms, nPolishTerms, выход - double ответ
+	//void ConvertToPolish(); // вход - массив terms, nTerms; выход - массив polishTerms, nPolishTerms
+	//double Calculate(); // вычисление по польской записи. Вход - массив polishTerms, nPolishTerms, выход - double ответ
 
 public:
 	Arithmetic(const string& str);
 	~Arithmetic() { delete[] terms; delete[] polishTerms;}
-	double Result();
+	
 	void DivideToTerms();
+	void Check();
+	void ConvertToPolish();
+	double Calculate();
+	double Result();
+	
+
+
 	double GetValTerms(const int i) { return terms[i].val; }
 };
 
