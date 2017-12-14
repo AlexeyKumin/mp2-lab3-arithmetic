@@ -7,7 +7,7 @@
 
 using namespace std;
 
-enum TermTypes {OPEN_BRACKET, CLOSE_BRACKET, OPERATOR, VALUE, UNKNOWN} ;
+enum TermTypes {OPEN_BRACKET, CLOSE_BRACKET, OPERATOR, VALUE, VARIABLE, UNKNOWN} ;
 
 const string allOperators = "(+-*/)";
 
@@ -18,11 +18,13 @@ struct Term
 
 	Term();
 	Term(const char c);
-	Term(const string& str, TermTypes myType);
+	Term(const string& str);
 	Term(const Term &t);// конструктор копирования
 	Term& operator=(const Term &t);// перегрузка =
 	~Term() { };
 	int PR(); // выводит приоритет оперции 
+	void inputVar();
+	double GetVal() { return val; }
 };
 
 // конвертация в double функция stod(): http://www.cplusplus.com/reference/string/stod/
@@ -59,15 +61,16 @@ class Arithmetic
 	int nPolishTerms; // число термов в польской записи
 
 	void Check(); 
-	void DivideToTerms(); // обходим входнуюю строку и разбиваем ее на массив terms, здесь же определяем их кол-во.
+	//void DivideToTerms(); // обходим входнуюю строку и разбиваем ее на массив terms, здесь же определяем их кол-во.
 	void ConvertToPolish(); // вход - массив terms, nTerms; выход - массив polishTerms, nPolishTerms
 	double Calculate(); // вычисление по польской записи. Вход - массив polishTerms, nPolishTerms, выход - double ответ
 
 public:
 	Arithmetic(const string& str);
-	~Arithmetic() { delete[] terms; }
+	~Arithmetic() { delete[] terms; delete[] polishTerms;}
 	double Result();
-	
+	void DivideToTerms();
+	double GetValTerms(const int i) { return terms[i].val; }
 };
 
 

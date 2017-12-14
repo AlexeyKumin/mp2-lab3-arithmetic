@@ -1,6 +1,8 @@
 // реализация функций и классов для вычисления арифметических выражений
 
 #include "arithmetic.h"
+#include <iostream>
+using namespace std;
 
 Term::Term()
 {
@@ -10,28 +12,34 @@ Term::Term()
 
 Term::Term(const char c)
 {
-	val = allOperators.find(c);
-	switch (allOperators.find(c))
+	if (isalpha(c))
 	{
-	case 0:
+		type = VARIABLE;
+		val = c;
+	}
+	else
 	{
-		type = OPEN_BRACKET;
-		break;
+		val = allOperators.find(c);
+		switch (allOperators.find(c))
+		{
+		case 0:
+			type = OPEN_BRACKET;
+			break;
+		case 5:
+			type = CLOSE_BRACKET;
+			break;
+		}
+		if ((val > 0) && (val < 5))
+			type = OPERATOR;
+		else
+			type = UNKNOWN;
 	}
-	case 5:
-	{
-		type = CLOSE_BRACKET;
-		break;
-	}
-	}
-	if ((val > 0) && (val < 5))
-	type = OPERATOR;
 }
 
-Term::Term(const string& str, TermTypes myType)
+Term::Term(const string& str)
 {
 	val = stod(str);
-	type = myType;
+	type = VALUE;
 }
 
 Term::Term(const Term &t)
@@ -57,6 +65,14 @@ Term& Term::operator=(const Term &t)
 	return *this;
 }
 
+void Term::inputVar()
+{
+	char c = (int)val;
+	cout << "Input VARIABLE " << c << " : ";
+	cin >> val;
+	cout << endl;
+}
+
 Arithmetic::Arithmetic(const string& str)
 {
 	terms = new Term[str.length()];
@@ -68,28 +84,39 @@ Arithmetic::Arithmetic(const string& str)
 
 void Arithmetic::DivideToTerms()
 {
-	for (int i = 0; i < inputStr.length(); i++)
+	int L = inputStr.length();
+	for (int i = 0; i < L; i++)
 	{
 		char c = inputStr[i];
-		if (allOperators.find(c) != string::npos) // если символ нашли в строке allOperators
+		if ((allOperators.find(c) != string::npos)|| (isalpha(c))) // если символ нашли в строке allOperators
 		{
-			terms[nTerms] = Term(c); // здесь определили тип внутри конструктора
+			Term t(c);
+			terms[nTerms] = t; 
 			nTerms++;
+			cout << "op" << endl;
 		}
 		else if (isdigit(c)) // это цифра, начиная с нее будет число.
 		{
 			string v;
 			int j = i;
-			while (j < inputStr.length() && (inputStr[j] == isdigit(c) || inputStr[j] == '.'))
+			while ((j < L) && (isdigit(inputStr[j]) || (inputStr[j] == '.')))
+			{
 				j++;
+			}
 			v = inputStr.substr(i, j - i);
-			terms[nTerms] = Term(v, VALUE); // здесь определили тип снаружи конструктора
+			Term t(v);
+			terms[nTerms] = t;
 			nTerms++;
 			i = j - 1;
+			cout << "value" << endl;
+			
 		}
 		else if (c != ' ')
-			throw "DontDivideToTerms";
+		{
+			throw "no";
+		}
 	}
+	cout << "norm" << endl;
 }
   
 void Arithmetic::Check()
@@ -211,8 +238,9 @@ double Arithmetic::Calculate()
 				break;
 			}
 		}
-		return st.pop();
+		
 	}
+	return st.pop();
 }
 
 double Arithmetic::Result()
