@@ -7,7 +7,7 @@
 
 using namespace std;
 
-enum TermTypes {OPEN_BRACKET, CLOSE_BRACKET, OPERATOR, VALUE, VARIABLE, UNKNOWN} ;
+enum TermTypes { OPEN_BRACKET, CLOSE_BRACKET, OPERATOR, VALUE, VARIABLE, UNKNOWN };
 
 const string allOperators = "(+-*/)";
 
@@ -60,24 +60,24 @@ class Arithmetic
 	Term* polishTerms; // польская запись в виде массива термов
 	int nPolishTerms; // число термов в польской записи
 
-	 
-	//void DivideToTerms(); // обходим входнуюю строку и разбиваем ее на массив terms, здесь же определяем их кол-во.
-	//void ConvertToPolish(); // вход - массив terms, nTerms; выход - массив polishTerms, nPolishTerms
-	//double Calculate(); // вычисление по польской записи. Вход - массив polishTerms, nPolishTerms, выход - double ответ
-
 public:
+	string StringConversion(const string& str);
+
 	Arithmetic(const string& str);
-	~Arithmetic() { delete[] terms; delete[] polishTerms;}
-	
+	~Arithmetic() { delete[] terms; delete[] polishTerms; }
+
 	void DivideToTerms();
-	void Check();
+	void ReplacementVar();
 	void ConvertToPolish();
 	double Calculate();
-	double Result();
-	
 
+	int CheckPoints(const string& str);
+	int CheckBrackets();
+	int CheckLetters();
+	int CheckOperators();
 
 	double GetValTerms(const int i) { return terms[i].val; }
+	double GetValPolishTerms(const int i) { return polishTerms[i].val; }
 };
 
 
