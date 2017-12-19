@@ -78,23 +78,23 @@ void Term::inputVar()
 	char c = (char)val;
 	cout << "Input VARIABLE " << c << " : ";
 	cin >> val;
-	cout << endl;
 }
 
 string Arithmetic::StringConversion(const string& str)
 {
 	string temp = str;
-	while (temp[0] == ' ')
-		temp.erase(0, 1);
-	if (temp[0] == '-')
-			temp = "0" + temp;
-	for (int i = 0; i < temp.length() - 1; i++)
+	for (int i = 0; i < temp.length(); i++)
+		if (temp[i] == ' ')
+			temp.erase(i, 1);
+	if (temp != "")
 	{
-		if ((temp[i] == '(') && (temp[i + 1] == ' '))
-			while (temp[i + 1] == ' ')
-				temp.erase(i + 1, 1);
-		if ((temp[i] == '(') && (temp[i + 1] == '-'))
-			temp.insert(i + 1, "0");
+		if (temp[0] == '-')
+			temp = "0" + temp;
+		for (int i = 0; i < temp.length() - 1; i++)
+		{
+			if ((temp[i] == '(') && (temp[i + 1] == '-'))
+				temp.insert(i + 1, "0");
+		}
 	}
 	return temp;
 }
@@ -124,27 +124,26 @@ void Arithmetic::DivideToTerms()
 		}
 		else
 			if (isdigit(c)) // это цифра, начиная с нее будет число.
-		{
-			string v;
-			int j = i;
-			while ((j < L) && (isdigit(inputStr[j]) || (inputStr[j] == '.')))
-				j++;
-			v = inputStr.substr(i, j - i);
-			if (CheckPoints(v))
 			{
-				Term t(v);
-				terms[nTerms] = t;
-				nTerms++;
+				string v;
+				int j = i;
+				while ((j < L) && (isdigit(inputStr[j]) || (inputStr[j] == '.')))
+					j++;
+				v = inputStr.substr(i, j - i);
+				if (CheckPoints(v))
+				{
+					Term t(v);
+					terms[nTerms] = t;
+					nTerms++;
+				}
+				else
+				{
+					terms[nTerms].type = UNKNOWN;
+					nTerms++;
+				}
+				i = j - 1;
 			}
 			else
-			{
-				terms[nTerms].type = UNKNOWN;
-				nTerms++;
-			}
-			i = j - 1;
-		}
-		else
-			if (c != ' ')
 			{
 				terms[nTerms].type = UNKNOWN;
 				nTerms++;
@@ -272,27 +271,36 @@ int Arithmetic::CheckPoints(const string& str)
 }
 
 int Arithmetic::CheckBrackets()
-{
-	int Brackets = 0, k = 0;
-
+{	
 	bool flag = true;
-	for (int i = 0; i < nTerms && Brackets >= 0; i++)
+	if (inputStr == "")
 	{
-		if (terms[i].type == OPEN_BRACKET)
-		{
-			Brackets++;
-			k = i;
-		}
-		if (terms[i].type == CLOSE_BRACKET)
-		{
-		Brackets--;
-		k = i;
-		}
-	}
-	if (Brackets != 0)
-	{
-		cout << "Brackets ERROR: " << k + 1 << endl;
+		cout << " VOID " << endl;
 		flag = false;
+	}
+	else
+	{
+		int Brackets = 0, k = 0;
+
+		
+		for (int i = 0; i < nTerms && Brackets >= 0; i++)
+		{
+			if (terms[i].type == OPEN_BRACKET)
+			{
+				Brackets++;
+				k = i;
+			}
+			if (terms[i].type == CLOSE_BRACKET)
+			{
+				Brackets--;
+				k = i;
+			}
+		}
+		if (Brackets != 0)
+		{
+			cout << "Brackets ERROR: " << k + 1 << endl;
+			flag = false;
+		}
 	}
 	return flag;
 }
@@ -300,7 +308,7 @@ int Arithmetic::CheckBrackets()
 int Arithmetic::CheckLetters()
 {
 	bool flag = true;
-	for (int i = 0; i < nTerms - 1; i++)
+	for (int i = 0; i < nTerms; i++)
 		if (terms[i].type == UNKNOWN)
 		{
 			cout << "Unknown symbol: " << i + 1 << endl;
@@ -324,7 +332,7 @@ int Arithmetic::CheckOperators()
 			switch (terms[i].type)
 			{
 			case OPEN_BRACKET:
-				if (!((terms[i + 1].type == OPEN_BRACKET) || (terms[i + 1].type == CLOSE_BRACKET) || (terms[i + 1].type == VALUE) || (terms[i + 1].type == VARIABLE) || (terms[i + 1].val == 2)))
+				if (!((terms[i + 1].type == OPEN_BRACKET) || (terms[i + 1].type == VALUE) || (terms[i + 1].type == VARIABLE) || (terms[i + 1].val == 2)))
 				{
 					cout << "Mistake OPERATOR IN :" << i + 1 << endl;
 					flag = false;

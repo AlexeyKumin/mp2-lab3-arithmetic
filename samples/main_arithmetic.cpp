@@ -5,12 +5,15 @@ using namespace std;
 
 void main()
 {
-	string input;
 	int p = 1;
 	while (p)
 	{
+		string input;
 		cout << "Enter the expression" << endl;
-		cin >> input;
+		getline(cin, input);
+		if (input == "")
+			getline(cin, input);
+
 		Arithmetic A(input);
 		A.DivideToTerms();
 		if (A.CheckBrackets() && A.CheckLetters() && A.CheckOperators())
@@ -19,9 +22,10 @@ void main()
 					A.ReplacementVar();
 					A.ConvertToPolish();
 					x = A.Calculate();
-					cout << " = " << x << endl;
+					cout << input + " = " << x << endl;
 					cout << endl;
 				}
+
 		cout << "Enter 1 to calculate again" << endl;
 		cout << "Enter 0 to exit" << endl;
 		cin >> p;
