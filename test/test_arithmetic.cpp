@@ -129,7 +129,10 @@ TEST(Arithmetic, inputVarCalcDiv3)
 {
 	Arithmetic t1("(a + (-a))");
 	t1.DivideToTerms();
-	t1.ReplacementVar();
+	istringstream input("5");
+
+	t1.ReplacementVar(input);
+
 	t1.ConvertToPolish();
 	double x = t1.Calculate();
 	EXPECT_EQ( 0, x);
@@ -139,7 +142,9 @@ TEST(Arithmetic, CanCalcDiv4)
 {
 	Arithmetic t1("3*5+(-2.0)/4.5*(-5-a)");
 	t1.DivideToTerms();
-	t1.ReplacementVar();
+	istringstream input("1");
+
+	t1.ReplacementVar(input);
 	t1.ConvertToPolish();
 	double x = t1.Calculate();
 	EXPECT_EQ(3 * 5 + (-2.0) / 4.5*(-5 - 1), x);

@@ -73,11 +73,11 @@ Term& Term::operator=(const Term &t)
 	return *this;
 }
 
-void Term::inputVar()
+void Term::inputVar(istream& in)
 {
 	char c = (char)val;
 	cout << "Input VARIABLE " << c << " : ";
-	cin >> val;
+	in >> val;
 }
 
 string Arithmetic::StringConversion(const string& str)
@@ -116,14 +116,14 @@ void Arithmetic::DivideToTerms()
 	for (int i = 0; i < L; i++)
 	{
 		char c = inputStr[i];
-		if ((allOperators.find(c) != string::npos) || (isalpha(c))) // если символ нашли в строке allOperators
+		if ((allOperators.find(c) != string::npos) || (isalpha(c))) 
 		{
 			Term t(c);
 			terms[nTerms] = t;
 			nTerms++;
 		}
 		else
-			if (isdigit(c)) // это цифра, начиная с нее будет число.
+			if (isdigit(c)) 
 			{
 				string v;
 				int j = i;
@@ -151,14 +151,14 @@ void Arithmetic::DivideToTerms()
 	}
 }
 
-void Arithmetic::ReplacementVar()
+void Arithmetic::ReplacementVar(istream& in)
 {
 	for (int i = 0; i < nTerms; i++)
 	{
 		if (terms[i].type == VARIABLE)
 		{
 			char c = (char)terms[i].val;
-			terms[i].inputVar();
+			terms[i].inputVar(in);
 			terms[i].type = VALUE;
 			for (int j = i + 1; j < nTerms; j++)
 			{
@@ -375,5 +375,4 @@ int Arithmetic::CheckOperators()
 		flag = false;
 	}
 	return flag;
-
 }

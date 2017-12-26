@@ -13,71 +13,48 @@ const string allOperators = "(+-*/)";
 
 struct Term
 {
-	TermTypes type;
-	double val;
+	TermTypes type; // Поле - тип лексемы
+	double val; // Поле - значение лексемы
 
-	Term();
-	Term(const char c);
-	Term(const string& str);
-	Term(const Term &t);// конструктор копирования
+	Term(); // пустой конструктор, создает лексему типа UNKNOWN
+	Term(const char c); // конструктор, принимает символ, определяет тип и значение этого сивола
+	Term(const string& str); // конструктор, принимает строку, создает лексему число
+	Term(const Term &t); // конструктор копирования
 	Term& operator=(const Term &t);// перегрузка =
-	~Term() { };
-	int PR(); // выводит приоритет оперции 
-	void inputVar();
-	double GetVal() { return val; }
+	~Term() { }; // деструктор
+	int PR(); // выводит приоритет лексемы
+	void inputVar(istream& in); // функция, позволяющая вводить значение лексемы VARIABLE
+	double GetVal() { return val; } // возвращает поле val
 };
-
-// конвертация в double функция stod(): http://www.cplusplus.com/reference/string/stod/
-
-
-// "(34-5)" ==>  массив из 5 Term 
-// если храним поле symbol
-// [0] type = OPEN_BRACKET, symbol = "(", val = 0.0;
-// [1] type = VALUE, symbol = "34", val = 34.0;
-// [2] type = OPERATOR, symbol = "-", val = 0.0;
-// [3] type = VALUE, symbol = "5", val = 5.0;
-// [2] type = CLOSE_BRACKET, symbol = ")", val = 0.0;
-
-// если НЕ храним поле symbol
-// [0] type = OPEN_BRACKET, val = 0.0;
-// [1] type = VALUE, val = 34.0;
-// [2] type = OPERATOR, val = 1.0 (это позиция '-' в строке allOperators);
-// [3] type = VALUE, val = 5.0;
-// [2] type = CLOSE_BRACKET, val = 0.0;
-
-
-// для этой строки: polishTerms = {"34", "5", "-"}
-
-//Term t = Term("(");
-//Term t2 = Term("34");
 
 class Arithmetic
 {
-	string inputStr;
-	Term* terms;
-	int nTerms; // число термов во входной строке
+	string inputStr; // поле - преобразованная строка
 
-	Term* polishTerms; // польская запись в виде массива термов
+	Term* terms; // поле - указатель на массив лексем
+	int nTerms; // число лексем во входной строке
+
+	Term* polishTerms; // польская запись в виде массива лексем
 	int nPolishTerms; // число термов в польской записи
 
 public:
-	string StringConversion(const string& str);
+	string StringConversion(const string& str); // принимает строку, преобразует ее удаляя пробелы и ставя 0 перед унарным минусом
 
-	Arithmetic(const string& str);
-	~Arithmetic() { delete[] terms; delete[] polishTerms; }
+	Arithmetic(const string& str); // конструктор, принимает строку, преоразует ее, заполняет поля, создает массивы
+	~Arithmetic() { delete[] terms; delete[] polishTerms; } // деструктор
 
-	void DivideToTerms();
-	void ReplacementVar();
-	void ConvertToPolish();
-	double Calculate();
+	void DivideToTerms(); // обрабатывает поле inputStr, заполняет массив Terms лексемами
+	void ReplacementVar(istream& in); // преобразует лесемы типа VARIABLE из массива Terms в тип VALUE и задает их значения
+	void ConvertToPolish(); // обрабатывает массив Terms, заполняя массив polishTerms лексемами т.е. создает обратную польскую запись
+	double Calculate(); // обрабатывает массив polishTerms, вычисляя изначальное арифметическое выражение, выводит его результат
 
-	int CheckPoints(const string& str);
-	int CheckBrackets();
-	int CheckLetters();
-	int CheckOperators();
+	int CheckPoints(const string& str); // проверяет кол-во и правильность их расположения, чтобы правильно переводить строку в действительное число 
+	int CheckBrackets(); // проверяет в массиве Terms соответствие скобок и их кол-во, выводит на экран ошибки
+	int CheckLetters(); // проверка на неопределенные символы в строке, обрабатывает массив Terms, выводит на экран ошибки
+	int CheckOperators(); // проверка на корректное расположение символов в строке, обрабатывает массив Terms, выводит на экран ошибки
 
-	double GetValTerms(const int i) { return terms[i].val; }
-	double GetValPolishTerms(const int i) { return polishTerms[i].val; }
+	double GetValTerms(const int i) { return terms[i].val; } // выводит значение i-той лексемы массива Terms
+	double GetValPolishTerms(const int i) { return polishTerms[i].val; } //выводит значение i-той лексемы массива polishTerms
 };
 
 

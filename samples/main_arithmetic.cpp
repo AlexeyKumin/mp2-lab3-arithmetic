@@ -19,7 +19,7 @@ void main()
 		if (A.CheckBrackets() && A.CheckLetters() && A.CheckOperators())
 				{
 					double x;
-					A.ReplacementVar();
+					A.ReplacementVar(cin);
 					A.ConvertToPolish();
 					x = A.Calculate();
 					cout << input + " = " << x << endl;
